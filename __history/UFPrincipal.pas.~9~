@@ -24,8 +24,6 @@ type
     Verficarprimo1: TMenuItem;
     Button1: TButton;
     Button2: TButton;
-    examen1: TMenuItem;
-    N202111: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure ElimiarDig1Click(Sender: TObject);
     procedure literak1Click(Sender: TObject);
@@ -36,7 +34,6 @@ type
     procedure Verficarprimo1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure N202111Click(Sender: TObject);
   private
     { Private declarations }
     N: Numero;
@@ -80,11 +77,6 @@ end;
 procedure TForm1.literak1Click(Sender: TObject);
 begin
  Edit2.Text := N.literal();
-end;
-
-procedure TForm1.N202111Click(Sender: TObject);
-begin
-  n.intercalarPrimoYnoPrimo;
 end;
 
 procedure TForm1.NumDesc1Click(Sender: TObject);

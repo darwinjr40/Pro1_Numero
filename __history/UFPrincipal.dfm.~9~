@@ -102,12 +102,5 @@ object Form1: TForm1
         OnClick = Verficarprimo1Click
       end
     end
-    object examen1: TMenuItem
-      Caption = 'examen'
-      object N202111: TMenuItem
-        Caption = '2021-1'
-        OnClick = N202111Click
-      end
-    end
   end
 end

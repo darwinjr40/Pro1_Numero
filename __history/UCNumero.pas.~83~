@@ -19,21 +19,58 @@ interface
         procedure Uunir2Num(x:Cardinal);
         procedure removeDigito(x:byte);
         procedure ordDesc();
+        procedure invertir();
+
         {funciones}
         Function getValor(): Cardinal;
         function NumDigitos :byte;     //cantidad de digitos
+
         function unidad(val:Cardinal):string;
         function dec(val: Cardinal): string;
         function decena(val: Cardinal): string;
+        function centena(val: Cardinal): string;
         function literal(): string;
+
         function existeNum(x:Cardinal):Boolean;
         function digMay():byte;
+        function verifPrimo():boolean;
+        function sacarPrimo():Integer;
+        function sacarNoPrimo():Integer;
 
-
+        {examen 1-2021}
+        procedure intercalarPrimoYnoPrimo();
     End;
 implementation
 
 { Numero }
+
+function Numero.centena(val: Cardinal): string;
+var cen:string;
+    dece: Cardinal;
+    obj:Numero;
+begin
+ cen:='';//100   1   01   5   85
+ obj:= Numero.crearX(val mod 100);
+ case(val div 100 )of
+  1:cen:='CIEN';
+  2:cen:='DOSCIENTOS';
+  3:cen:='TRESCIENTOS';
+  4:cen:='CUATROCIENTOS';
+  5:cen:='QUINIENTOS';
+  6:cen:='SEISCIENTOS';
+  7:cen:='SETECIENTOS';
+  8:cen:='OCHOCIENTOS';
+  9:cen:='NOVECIENTOS';
+ end;
+ if (val mod 100 <> 0) then begin
+  if (val div 100 = 1) then
+    cen := 'CIENTO ' + obj.literal
+  else
+    cen := cen +' '+ obj.literal
+ end;
+
+ Result:= cen;
+end;
 
 constructor Numero.crear();
 begin
@@ -86,6 +123,41 @@ begin
      raise Exception.Create('Posicion fuera de rango');
 
 end;
+procedure Numero.intercalarPrimoYnoPrimo;
+var sw : Boolean;
+     x : Integer;
+     n : Cardinal;
+begin
+  invertir();
+  sw := true;
+  n := 0;
+  while (valor > 0) do begin
+    if sw then begin
+      x := sacarPrimo();
+    end else begin
+      x := sacarNoPrimo();
+    end;
+
+    if x >= 0  then begin
+       n := n * 10 + x;
+    end;
+    sw := not(sw);
+
+
+  end;
+
+end;
+
+procedure Numero.invertir;
+var n:Cardinal;
+begin
+  while Valor > 0 do begin
+    n := n *10 +(valor mod 10);
+    Valor := valor div 10;
+  end;
+  valor := n;
+end;
+
 //------------------------------------------------------------------
 //cantidad de digitos
 function Numero.NumDigitos: byte;
@@ -139,7 +211,7 @@ begin
 end;
 
 //------------------------------------------------------------------
-{}
+{si un numero se encuentra en otro}
 function Numero.existeNum(x: Cardinal): Boolean;
 var  cd: byte;
     val, d, n: Cardinal;
@@ -165,10 +237,38 @@ begin
 end;
 
 //------------------------------------------------------------------
+function Numero.sacarNoPrimo: Integer;
+
+begin
+  while (valor > 0)and (verifPrimo(valor mod 10)) do begin
+
+  end;
+
+end;
+
+function Numero.sacarPrimo: Integer;
+var n, p, res : Cardinal;
+
+begin
+  p := 1;
+  n := 0;
+  res:=-1;
+  while (valor > 0)and not(verifPrimo(valor mod 10)) do begin
+    n := (valor mod 10) * p + n;
+    p := p * 10;
+  end;
+  if valor > 0 then // encontraste al primo
+    res:= valor mod 10;
+  Uunir2Num(n);
+  result := res;
+end;
+
 procedure Numero.setValor(x: Cardinal);
 begin
   valor := x;
 end;
+//------------------------------------------------------------------
+
 function Numero.unidad(val: Cardinal): string;
 var uni:string;
 begin
@@ -187,13 +287,31 @@ begin
  end;
   result:= uni;
 end;
-
+//------------------------------------------------------------------
+{unir 2 numeros}
 procedure Numero.Uunir2Num(x: Cardinal);
 var objeto:Numero;
 begin  //123     46
         //123 *100 + 46 ===> 12346
   objeto := Numero.crearX(x);
   valor := valor * trunc(power(10,objeto.NumDigitos)) + objeto.Valor;
+end;
+
+function Numero.verifPrimo: boolean;
+var i: Cardinal;
+begin
+  if valor = 1 then begin
+    Result := false;
+  end else begin
+     i := Valor div 2;
+    while ( i > 1) do begin
+      if (valor mod i) = 0 then
+        Result := false;
+
+    end;
+    result := true;
+  end;
+
 end;
 
 //------------------------------------------------------------------
@@ -223,23 +341,23 @@ begin
  dece:='';//20
  m := val mod 10; // 0
  d := val div 10; //3
-  case( d )of
-    2:dece:='VEINTE';
-    3:dece:='TREINTA';
-    4:dece:='CUARENTA';
-    5:dece:='CINCUENTA';
-    6:dece:='SESENTA';
-    7:dece:='SETENTA';
-    8:dece:='OCHENTA';
-    9:dece:='NOVENTA';
-  end;
-  //dece = TREINTA
-  if ((d = 2)and(m <> 0)) then begin//21...29
-      dece := 'VEINTI'+ unidad(m)
-  end else begin
-      if (m <> 0) then begin//31...99
+
+    case( d )of
+      2:dece:='VEINTE';
+      3:dece:='TREINTA';
+      4:dece:='CUARENTA';
+      5:dece:='CINCUENTA';
+      6:dece:='SESENTA';
+      7:dece:='SETENTA';
+      8:dece:='OCHENTA';
+      9:dece:='NOVENTA';
+    end;
+
+  if (m <> 0) then begin
+     if (d = 2) then  //21...29
+        dece := 'VEINTI'+ unidad(m)
+     else   //31...99
         dece := dece + ' Y '+ unidad(m);
-      end;
   end;
   result := dece;
 end;
@@ -269,11 +387,12 @@ begin
   0..9:  cad := unidad(valor);
   10..19: cad := dec(valor);
   20..99: cad := decena(valor);
-  100..999:
+  100..999: cad := centena(valor)
   else
     cad:= 'fuera de rango';
  end;
   result:= cad;
 end;
+//------------------------------------------------------------------
 
 end.

@@ -22,18 +22,49 @@ interface
         {funciones}
         Function getValor(): Cardinal;
         function NumDigitos :byte;     //cantidad de digitos
+
         function unidad(val:Cardinal):string;
         function dec(val: Cardinal): string;
         function decena(val: Cardinal): string;
+        function centena(val: Cardinal): string;
         function literal(): string;
+
         function existeNum(x:Cardinal):Boolean;
         function digMay():byte;
-
+        function verifPrimo():boolean;
 
     End;
 implementation
 
 { Numero }
+
+function Numero.centena(val: Cardinal): string;
+var cen:string;
+    dece: Cardinal;
+    obj:Numero;
+begin
+ cen:='';//100   1   01   5   85
+ obj:= Numero.crearX(val mod 100);
+ case(val div 100 )of
+  1:cen:='CIEN';
+  2:cen:='DOSCIENTOS';
+  3:cen:='TRESCIENTOS';
+  4:cen:='CUATROCIENTOS';
+  5:cen:='QUINIENTOS';
+  6:cen:='SEISCIENTOS';
+  7:cen:='SETECIENTOS';
+  8:cen:='OCHOCIENTOS';
+  9:cen:='NOVECIENTOS';
+ end;
+ if (val mod 100 <> 0) then begin
+  if (val div 100 = 1) then
+    cen := 'CIENTO ' + obj.literal
+  else
+    cen := cen +' '+ obj.literal
+ end;
+
+ Result:= cen;
+end;
 
 constructor Numero.crear();
 begin
@@ -199,6 +230,23 @@ begin  //123     46
   valor := valor * trunc(power(10,objeto.NumDigitos)) + objeto.Valor;
 end;
 
+function Numero.verifPrimo: boolean;
+var i: Cardinal;
+begin
+  if valor = 1 then begin
+    Result := false;
+  end else begin
+     i := Valor div 2;
+    while ( i > 1) do begin
+      if (valor mod i) = 0 then
+        Result := false;
+
+    end;
+    result := true;
+  end;
+
+end;
+
 //------------------------------------------------------------------
 function Numero.dec(val: Cardinal): string;
 var helps:string;
@@ -226,23 +274,23 @@ begin
  dece:='';//20
  m := val mod 10; // 0
  d := val div 10; //3
-  case( d )of
-    2:dece:='VEINTE';
-    3:dece:='TREINTA';
-    4:dece:='CUARENTA';
-    5:dece:='CINCUENTA';
-    6:dece:='SESENTA';
-    7:dece:='SETENTA';
-    8:dece:='OCHENTA';
-    9:dece:='NOVENTA';
-  end;
-  //dece = TREINTA
-  if ((d = 2)and(m <> 0)) then begin//21...29
-      dece := 'VEINTI'+ unidad(m)
-  end else begin
-      if (m <> 0) then begin//31...99
+
+    case( d )of
+      2:dece:='VEINTE';
+      3:dece:='TREINTA';
+      4:dece:='CUARENTA';
+      5:dece:='CINCUENTA';
+      6:dece:='SESENTA';
+      7:dece:='SETENTA';
+      8:dece:='OCHENTA';
+      9:dece:='NOVENTA';
+    end;
+
+  if (m <> 0) then begin
+     if (d = 2) then  //21...29
+        dece := 'VEINTI'+ unidad(m)
+     else   //31...99
         dece := dece + ' Y '+ unidad(m);
-      end;
   end;
   result := dece;
 end;
@@ -272,11 +320,12 @@ begin
   0..9:  cad := unidad(valor);
   10..19: cad := dec(valor);
   20..99: cad := decena(valor);
-  100..999:
+  100..999: cad := centena(valor)
   else
     cad:= 'fuera de rango';
  end;
   result:= cad;
 end;
+//------------------------------------------------------------------
 
 end.

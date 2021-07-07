@@ -31,7 +31,7 @@ object Form1: TForm1
   object Edit2: TEdit
     Left = 296
     Top = 112
-    Width = 417
+    Width = 177
     Height = 27
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -41,24 +41,6 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 1
   end
-  object Button1: TButton
-    Left = 176
-    Top = 56
-    Width = 75
-    Height = 25
-    Caption = 'cargar'
-    TabOrder = 2
-    OnClick = Button1Click
-  end
-  object Button2: TButton
-    Left = 176
-    Top = 87
-    Width = 75
-    Height = 25
-    Caption = 'descargar'
-    TabOrder = 3
-    OnClick = Button2Click
-  end
   object MainMenu1: TMainMenu
     Left = 8
     Top = 16
@@ -66,9 +48,11 @@ object Form1: TForm1
       Caption = 'Numero'
       object cargar1: TMenuItem
         Caption = 'cargar'
+        OnClick = cargar1Click
       end
       object descargar1: TMenuItem
         Caption = 'descargar'
+        OnClick = descargar1Click
       end
       object ElimiarDig1: TMenuItem
         Caption = 'ElimiarDig'
@@ -93,20 +77,6 @@ object Form1: TForm1
       object NumDesc1: TMenuItem
         Caption = 'NumDesc'
         OnClick = NumDesc1Click
-      end
-    end
-    object function1: TMenuItem
-      Caption = 'function'
-      object Verficarprimo1: TMenuItem
-        Caption = 'Verficar primo'
-        OnClick = Verficarprimo1Click
-      end
-    end
-    object examen1: TMenuItem
-      Caption = 'examen'
-      object N202111: TMenuItem
-        Caption = '2021-1'
-        OnClick = N202111Click
       end
     end
   end

@@ -20,23 +20,15 @@ type
     digMayor1: TMenuItem;
     removeDig1: TMenuItem;
     NumDesc1: TMenuItem;
-    function1: TMenuItem;
-    Verficarprimo1: TMenuItem;
-    Button1: TButton;
-    Button2: TButton;
-    examen1: TMenuItem;
-    N202111: TMenuItem;
     procedure FormCreate(Sender: TObject);
+    procedure cargar1Click(Sender: TObject);
+    procedure descargar1Click(Sender: TObject);
     procedure ElimiarDig1Click(Sender: TObject);
     procedure literak1Click(Sender: TObject);
     procedure VerifExisteNum1Click(Sender: TObject);
     procedure digMayor1Click(Sender: TObject);
     procedure removeDig1Click(Sender: TObject);
     procedure NumDesc1Click(Sender: TObject);
-    procedure Verficarprimo1Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure N202111Click(Sender: TObject);
   private
     { Private declarations }
     N: Numero;
@@ -51,12 +43,12 @@ implementation
 
 {$R *.dfm}
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.cargar1Click(Sender: TObject);
 begin
-N.setValor(StrToInt(Edit1.Text));
+  N.setValor(StrToInt(Edit1.Text));
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.descargar1Click(Sender: TObject);
 begin
 Edit2.Text := IntToStr(N.getValor());
 end;
@@ -82,11 +74,6 @@ begin
  Edit2.Text := N.literal();
 end;
 
-procedure TForm1.N202111Click(Sender: TObject);
-begin
-  n.intercalarPrimoYnoPrimo;
-end;
-
 procedure TForm1.NumDesc1Click(Sender: TObject);
 begin
   n.ordDesc();
@@ -97,11 +84,6 @@ var x : byte;
 begin
   x := Strtoint(InputBox('Ingrese el numero a eliminar','',''));
   N.removeDigito(x);
-end;
-
-procedure TForm1.Verficarprimo1Click(Sender: TObject);
-begin
- Edit2.Text := BoolToStr(N.verifPrimo, true);
 end;
 
 procedure TForm1.VerifExisteNum1Click(Sender: TObject);
